@@ -6,8 +6,14 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 packages = [{include = "hhrubot", from = "src"}]
 
+[tool.poetry.scripts]
+post = "hhrubot.main:standalone"
+
 [tool.poetry.dependencies]
 python = "^3.10"
+fastapi = "^0.109.2"
+aiogram = "^3.4.1"
+uvicorn = "^0.27.1"
 
 
 [build-system]
