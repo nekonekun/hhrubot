@@ -13,7 +13,7 @@ telegram_router = APIRouter(prefix='/webhook')
 
 @telegram_router.post('/telegram/{bot_id}')
 async def helloworld(
-    bot_id: str,
+    bot_id: int,
     update: Update,
     feeder: Annotated[Feeder, Depends(Stub(Feeder))],
 ):
