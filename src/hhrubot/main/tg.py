@@ -19,8 +19,8 @@ def get_hh_bot():
 
 
 async def init_bot(bot: Bot):
-    url_prefix = os.getenv('HHRU_BOT_WEBHOOK_PREFIX')
-    await bot.set_webhook(url=url_prefix + str(bot.id), allowed_updates=['message', 'callback_query', 'inline_query'])
+    url = os.getenv('HHRU_BOT_WEBHOOK_URL')
+    await bot.set_webhook(url=url, allowed_updates=['message', 'callback_query', 'inline_query'])
 
 
 async def dispose_bot(bot: Bot):

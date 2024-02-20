@@ -1,23 +1,19 @@
 from typing import Annotated
 
-from aiogram import Dispatcher
+from aiogram import Dispatcher, Bot
 from aiogram.types import Update
 from fastapi import APIRouter, Depends
 
 from hhrubot.api.depends_stub import Stub
-from hhrubot.application.feeder import Feeder, FeederError
 
 
 telegram_router = APIRouter(prefix='/webhook')
 
 
-@telegram_router.post('/telegram/{bot_id}')
-async def helloworld(
-    bot_id: int,
+@telegram_router.post('/telegram/')
+async def handle_update(
     update: Update,
-    feeder: Annotated[Feeder, Depends(Stub(Feeder))],
+    dispatcher: Annotated[Dispatcher, Depends(Stub(Dispatcher))],
+    bot: Annotated[Bot, Depends(Stub(Bot))],
 ):
-    try:
-        return await feeder(update=update, bot_identifier=bot_id)
-    except FeederError as exc:
-        return None
+    return await dispatcher.feed_update(bot, update)

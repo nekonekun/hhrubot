@@ -5,8 +5,7 @@ from fastapi import FastAPI
 
 from hhrubot.api.router.default import default_router
 from hhrubot.api.router.webhook import telegram_router
-from hhrubot.application.feeder import Feeder
-from hhrubot.main.tg import create_hh_dispatcher, get_hh_bot, init_bot, dispose_bot
+from hhrubot.main.tg import create_hh_dispatcher, get_hh_bot
 
 
 def include_routers(app: FastAPI):
@@ -15,9 +14,8 @@ def include_routers(app: FastAPI):
 
 
 def init_dependencies(app: FastAPI, dispatcher: Dispatcher, bot: Bot):
-    feeder = Feeder()
-    feeder.register(bot, dispatcher)
-    app.dependency_overrides[Feeder] = lambda: feeder
+    app.dependency_overrides[Dispatcher] = lambda: dispatcher
+    app.dependency_overrides[Bot] = lambda: bot
 
 
 @asynccontextmanager
