@@ -2,18 +2,18 @@ from typing import Annotated
 
 from aiogram import Dispatcher, Bot
 from aiogram.types import Update
-from fastapi import APIRouter, Depends
-
-from hhrubot.api.depends_stub import Stub
-
-
-telegram_router = APIRouter(prefix='/webhook')
+from dishka.integrations.fastapi import Depends, inject
+from fastapi import APIRouter
 
 
-@telegram_router.post('/telegram/')
+webhook_router = APIRouter(prefix='/webhook')
+
+
+@webhook_router.post('/telegram/')
+@inject
 async def handle_update(
     update: Update,
-    dispatcher: Annotated[Dispatcher, Depends(Stub(Dispatcher))],
-    bot: Annotated[Bot, Depends(Stub(Bot))],
+    dispatcher: Annotated[Dispatcher, Depends()],
+    bot: Annotated[Bot, Depends()],
 ):
     return await dispatcher.feed_update(bot, update)
