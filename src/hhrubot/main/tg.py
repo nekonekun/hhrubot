@@ -1,12 +1,13 @@
 import os
 
 from aiogram import Dispatcher, Bot
+from aiogram.fsm.storage.redis import RedisStorage, Redis
 
 from hhrubot.tg.router.echo import echo_router
 
 
 def create_hh_dispatcher():
-    dispatcher = Dispatcher()
+    dispatcher = Dispatcher(storage=RedisStorage(Redis()))
     dispatcher.include_router(echo_router)
     dispatcher.startup.register(init_bot)
     dispatcher.shutdown.register(dispose_bot)
