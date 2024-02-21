@@ -30,14 +30,13 @@ def include_routers(app: FastAPI):
     app.include_router(webhook_router)
 
 
-def init_dependencies(app: FastAPI, dispatcher: Dispatcher, bot: Bot):
-    app.dependency_overrides[Dispatcher] = lambda: dispatcher
-    app.dependency_overrides[Bot] = lambda: bot
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    dispatcher: Dispatcher = await app.state.dishka_container.get(Dispatcher)
+    bot: Bot = await app.state.dishka_container.get(Bot)
+    await dispatcher.emit_startup(bot=bot)
     yield
+    await dispatcher.emit_shutdown(bot=bot)
     await app.state.dishka_container.close()
 
 
