@@ -1,4 +1,4 @@
-from hhrubot.adapter.headhunter import HeadhunterSettings, HeadhunterAppSession, HeadhunterUserSession
+from hhrubot.adapter.headhunter import HeadhunterAppSession, HeadhunterSettings, HeadhunterUserSession
 from hhrubot.adapter.redisgram import RedisGram
 
 

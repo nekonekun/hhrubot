@@ -4,14 +4,14 @@ from typing import AsyncIterator
 from dishka import Provider, Scope, provide
 
 from hhrubot.adapter.headhunter import (
-    HeadhunterSettings,
+    HeadhunterAccessToken,
     HeadhunterAppSession,
     HeadhunterAppSessionFactory,
-    HeadhunterUserSessionFactory,
+    HeadhunterSettings,
     HeadhunterUserSession,
-    HeadhunterAccessToken
+    HeadhunterUserSessionFactory,
 )
-from hhrubot.application.headhunter import BuildLoginURL, AuthenticateUser, GetResumeList
+from hhrubot.application.headhunter import AuthenticateUser, BuildLoginURL, GetResumeList
 
 
 class HeadhunterProvider(Provider):

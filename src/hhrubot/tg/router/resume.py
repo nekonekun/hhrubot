@@ -1,14 +1,13 @@
 from typing import Annotated
 
-from aiogram import Router, flags, F
+from aiogram import F, Router, flags
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, WebAppInfo
 from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardButton
-from dishka.integrations.aiogram import inject, Depends
+from dishka.integrations.aiogram import Depends, inject
 
 from hhrubot.application.headhunter import BuildLoginURL, GetResumeList
-
 
 resume_router = Router()
 

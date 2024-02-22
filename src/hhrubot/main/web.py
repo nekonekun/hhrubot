@@ -1,12 +1,13 @@
 from contextlib import asynccontextmanager
 
-from aiogram import Dispatcher, Bot
+from aiogram import Bot, Dispatcher
 from dishka import make_async_container
 from dishka.integrations.fastapi import setup_dishka as setup_dishka
 from fastapi import FastAPI
 
 from hhrubot.api.router.default import default_router
 from hhrubot.api.router.webhook import webhook_router
+
 from .providers import HeadhunterProvider
 from .tg import TelegramObjectsProvider
 

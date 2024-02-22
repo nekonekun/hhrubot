@@ -1,13 +1,12 @@
 from typing import Annotated
 
-from aiogram import Dispatcher, Bot
+from aiogram import Bot, Dispatcher
 from aiogram.types import Update
 from dishka.integrations.fastapi import Depends, inject
 from fastapi import APIRouter, Query, status
 from fastapi.responses import JSONResponse
 
 from hhrubot.application.headhunter import AuthenticateUser
-
 
 webhook_router = APIRouter(prefix='/webhook')
 

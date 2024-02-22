@@ -1,14 +1,15 @@
 import os
 
-from aiogram import Dispatcher, Bot
-from aiogram.fsm.storage.redis import RedisStorage, Redis
-from dishka import Provider, Scope, provide, make_async_container
+from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.redis import Redis, RedisStorage
+from dishka import Provider, Scope, make_async_container, provide
 from dishka.integrations.aiogram import setup_dishka
 
 from hhrubot.adapter.redisgram import RedisGram
 from hhrubot.tg.middleware.employee import EmployeeMiddleware
 from hhrubot.tg.router.echo import echo_router
 from hhrubot.tg.router.resume import resume_router
+
 from .providers import HeadhunterProvider
 
 
