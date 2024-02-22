@@ -1,4 +1,3 @@
-import logging
 from typing import Any, Awaitable, Callable
 
 from aiogram import BaseMiddleware, Bot
