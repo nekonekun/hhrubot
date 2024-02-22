@@ -32,5 +32,5 @@ async def handle_authentication(
     authenticate_user: Annotated[AuthenticateUser, Depends()]
 ):
     await authenticate_user(telegram_id, code)
-    await bot.send_message(telegram_id, 'Authentication was successfull')
+    await bot.send_message(telegram_id, 'Successfully authenticated.')
     return JSONResponse(content={'whats next': 'close window'}, status_code=status.HTTP_200_OK)
