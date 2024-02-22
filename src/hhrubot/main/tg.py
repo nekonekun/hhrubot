@@ -2,15 +2,26 @@ import os
 
 from aiogram import Dispatcher, Bot
 from aiogram.fsm.storage.redis import RedisStorage, Redis
+from dishka import Provider, Scope, provide, make_async_container
+from dishka.integrations.aiogram import setup_dishka
 
+from hhrubot.adapter.redisgram import RedisGram
+from hhrubot.tg.middleware.employee import EmployeeMiddleware
 from hhrubot.tg.router.echo import echo_router
+from hhrubot.tg.router.resume import resume_router
+from .providers import HeadhunterProvider
 
 
-def create_hh_dispatcher():
+async def create_hh_dispatcher():
     dispatcher = Dispatcher(storage=RedisStorage(Redis()))
+    dispatcher.include_router(resume_router)
     dispatcher.include_router(echo_router)
     dispatcher.startup.register(init_bot)
     dispatcher.shutdown.register(dispose_bot)
+    container = make_async_container(HeadhunterProvider())
+    setup_dishka(container, dispatcher)
+    employee_middleware = EmployeeMiddleware()
+    dispatcher.message.middleware(employee_middleware)
     return dispatcher
 
 
@@ -26,3 +37,18 @@ async def init_bot(bot: Bot):
 
 async def dispose_bot(bot: Bot):
     await bot.session.close()
+
+
+class TelegramObjectsProvider(Provider):
+    @provide(scope=Scope.APP)
+    async def get_dispatcher(self) -> Dispatcher:
+        return await create_hh_dispatcher()
+
+    @provide(scope=Scope.APP)
+    def get_bot(self) -> Bot:
+        return get_hh_bot()
+
+    @provide(scope=Scope.APP)
+    def get_redisgram(self, dispatcher: Dispatcher, bot: Bot) -> RedisGram:
+        storage = dispatcher.storage
+        return RedisGram(storage=storage, bot_id=bot.id)

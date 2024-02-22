@@ -1,28 +1,14 @@
 from contextlib import asynccontextmanager
 
 from aiogram import Dispatcher, Bot
-from dishka import (
-    Provider,
-    Scope,
-    make_async_container,
-    provide,
-)
-from dishka.integrations.fastapi import setup_dishka
+from dishka import make_async_container
+from dishka.integrations.fastapi import setup_dishka as setup_dishka
 from fastapi import FastAPI
 
 from hhrubot.api.router.default import default_router
 from hhrubot.api.router.webhook import webhook_router
-from hhrubot.main.tg import create_hh_dispatcher, get_hh_bot
-
-
-class TelegramObjectsProvider(Provider):
-    @provide(scope=Scope.APP)
-    def get_dispatcher(self) -> Dispatcher:
-        return create_hh_dispatcher()
-
-    @provide(scope=Scope.APP)
-    def get_bot(self) -> Bot:
-        return get_hh_bot()
+from .providers import HeadhunterProvider
+from .tg import TelegramObjectsProvider
 
 
 def include_routers(app: FastAPI):
@@ -43,6 +29,6 @@ async def lifespan(app: FastAPI):
 def create_app():
     app = FastAPI(docs_url=None, redoc_url=None, lifespan=lifespan)
     include_routers(app)
-    container = make_async_container(TelegramObjectsProvider())
+    container = make_async_container(TelegramObjectsProvider(), HeadhunterProvider())
     setup_dishka(container, app)
     return app
