@@ -7,6 +7,7 @@ from fastapi import FastAPI
 
 from hhrubot.api.router.default import default_router
 from hhrubot.api.router.webhook import webhook_router
+from hhrubot.api.router.internal import internal_router
 
 from .providers import HeadhunterProvider
 from .tg import TelegramObjectsProvider
@@ -15,6 +16,7 @@ from .tg import TelegramObjectsProvider
 def include_routers(app: FastAPI):
     app.include_router(default_router)
     app.include_router(webhook_router)
+    app.include_router(internal_router)
 
 
 @asynccontextmanager

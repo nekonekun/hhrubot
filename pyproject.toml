@@ -16,6 +16,9 @@ aiogram = "^3.4.1"
 uvicorn = "^0.27.1"
 dishka = "^0.4.0"
 redis = {extras = ["hiredis"], version = "^5.0.1"}
+pylatex = "^1.4.2"
+dramatiq = {extras = ["redis", "watch"], version = "^1.16.0"}
+httpx = "^0.27.0"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -11,7 +11,7 @@ from hhrubot.adapter.headhunter import (
     HeadhunterUserSession,
     HeadhunterUserSessionFactory,
 )
-from hhrubot.application.headhunter import AuthenticateUser, BuildLoginURL, GetResumeList
+from hhrubot.application.headhunter import AuthenticateUser, BuildLoginURL, GetResumeList, GetResume
 
 
 class HeadhunterProvider(Provider):
@@ -49,3 +49,4 @@ class HeadhunterProvider(Provider):
     authenticate_user = provide(AuthenticateUser, scope=Scope.REQUEST)
     build_login_url = provide(BuildLoginURL, scope=Scope.APP)
     get_resume_list = provide(GetResumeList, scope=Scope.REQUEST)
+    get_resume = provide(GetResume, scope=Scope.REQUEST)

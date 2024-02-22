@@ -23,6 +23,7 @@ async def create_hh_dispatcher():
     setup_dishka(container, dispatcher)
     employee_middleware = EmployeeMiddleware()
     dispatcher.message.middleware(employee_middleware)
+    dispatcher.callback_query.middleware(employee_middleware)
     return dispatcher
 
 

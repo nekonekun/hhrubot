@@ -18,7 +18,7 @@ async def handle_update(
     dispatcher: Annotated[Dispatcher, Depends()],
     bot: Annotated[Bot, Depends()],
 ):
-    return await dispatcher.feed_update(bot, update)
+    return await dispatcher.feed_webhook_update(bot, update)
 
 
 @webhook_router.get('/headhunter/{telegram_id}/')

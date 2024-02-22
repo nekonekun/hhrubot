@@ -51,3 +51,13 @@ class GetResumeList:
         ) as response:
             content = await response.json()
         return content
+
+
+class GetResume:
+    def __init__(self, session: HeadhunterUserSession):
+        self.session = session
+
+    async def __call__(self, resume_id: str):
+        async with self.session.get(f'/resumes/{resume_id}') as response:
+            content = await response.json()
+        return content
