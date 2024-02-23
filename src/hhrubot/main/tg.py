@@ -10,7 +10,7 @@ from hhrubot.tg.middleware.employee import EmployeeMiddleware
 from hhrubot.tg.router.echo import echo_router
 from hhrubot.tg.router.resume import resume_router
 
-from .providers import HeadhunterProvider
+from .providers import HeadhunterOfflineProvider, HeadhunterOnlineProvider, HeadhunterMethodsProvider
 
 
 async def create_hh_dispatcher():
@@ -19,7 +19,11 @@ async def create_hh_dispatcher():
     dispatcher.include_router(echo_router)
     dispatcher.startup.register(init_bot)
     dispatcher.shutdown.register(dispose_bot)
-    container = make_async_container(HeadhunterProvider())
+    container = make_async_container(
+        HeadhunterOfflineProvider(),
+        HeadhunterOnlineProvider(),
+        HeadhunterMethodsProvider(),
+    )
     setup_dishka(container, dispatcher)
     employee_middleware = EmployeeMiddleware()
     dispatcher.message.middleware(employee_middleware)

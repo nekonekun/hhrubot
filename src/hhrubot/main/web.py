@@ -9,7 +9,7 @@ from hhrubot.api.router.default import default_router
 from hhrubot.api.router.webhook import webhook_router
 from hhrubot.api.router.internal import internal_router
 
-from .providers import HeadhunterProvider
+from .providers import HeadhunterOfflineProvider, HeadhunterOnlineProvider, HeadhunterMethodsProvider
 from .tg import TelegramObjectsProvider
 
 
@@ -32,6 +32,11 @@ async def lifespan(app: FastAPI):
 def create_app():
     app = FastAPI(docs_url=None, redoc_url=None, lifespan=lifespan)
     include_routers(app)
-    container = make_async_container(TelegramObjectsProvider(), HeadhunterProvider())
+    container = make_async_container(
+        TelegramObjectsProvider(),
+        HeadhunterOfflineProvider(),
+        HeadhunterOnlineProvider(),
+        HeadhunterMethodsProvider()
+    )
     setup_dishka(container, app)
     return app

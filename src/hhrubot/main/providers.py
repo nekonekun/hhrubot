@@ -14,7 +14,7 @@ from hhrubot.adapter.headhunter import (
 from hhrubot.application.headhunter import AuthenticateUser, BuildLoginURL, GetResumeList, GetResume
 
 
-class HeadhunterProvider(Provider):
+class HeadhunterOfflineProvider(Provider):
     @provide(scope=Scope.APP)
     def get_settings(self) -> HeadhunterSettings:
         return HeadhunterSettings(
@@ -29,6 +29,10 @@ class HeadhunterProvider(Provider):
             contact_email=os.getenv('HEADHUNTER_CONTACT_EMAIL'),
         )
 
+    build_login_url = provide(BuildLoginURL, scope=Scope.APP)
+
+
+class HeadhunterOnlineProvider(Provider):
     session_factory = provide(HeadhunterAppSessionFactory, scope=Scope.APP)
     employee_session_factory = provide(HeadhunterUserSessionFactory, scope=Scope.APP)
 
@@ -46,7 +50,8 @@ class HeadhunterProvider(Provider):
         async with factory(access_token=access_token) as session:
             yield session
 
+
+class HeadhunterMethodsProvider(Provider):
     authenticate_user = provide(AuthenticateUser, scope=Scope.REQUEST)
-    build_login_url = provide(BuildLoginURL, scope=Scope.APP)
     get_resume_list = provide(GetResumeList, scope=Scope.REQUEST)
     get_resume = provide(GetResume, scope=Scope.REQUEST)
