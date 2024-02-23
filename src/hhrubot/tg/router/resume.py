@@ -65,7 +65,9 @@ async def process_resume(
     get_resume: Annotated[GetResume, Depends()],
 ):
     await callback_query.answer()
+    await callback_query.message.delete_reply_markup()
     text = 'It will take some time (around 1-2 minutes) to generate files. Please, be patient.'
     await callback_query.message.answer(text)
     resume = await get_resume(callback_data.resume_id)
+    await callback_query.message.edit_text(callback_query.message.text + '\n\n' + resume['title'])
     make_documents.send(telegram_id=callback_query.from_user.id, filename=callback_data.resume_id, resume=resume)
