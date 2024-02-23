@@ -10,4 +10,7 @@ from hhrubot.application.texpdf import render
 def make_documents(*, telegram_id: int, filename: str, resume: dict):
     render(filename, resume)
     base_url = os.getenv('HHRU_BOT_API_URL').rstrip('/')
-    httpx.post(f'{base_url}/internal/tex-pdf/', json={'telegram_id': telegram_id, 'filename': filename})
+    httpx.post(
+        f'{base_url}/internal/tex-pdf/',
+        json={'telegram_id': telegram_id, 'filename': filename},
+    )

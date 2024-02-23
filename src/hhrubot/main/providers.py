@@ -1,5 +1,5 @@
 import os
-from typing import AsyncIterator
+from collections.abc import AsyncIterator
 
 from dishka import Provider, Scope, provide
 
@@ -11,7 +11,12 @@ from hhrubot.adapter.headhunter import (
     HeadhunterUserSession,
     HeadhunterUserSessionFactory,
 )
-from hhrubot.application.headhunter import AuthenticateUser, BuildLoginURL, GetResumeList, GetResume
+from hhrubot.application.headhunter import (
+    AuthenticateUser,
+    BuildLoginURL,
+    GetResume,
+    GetResumeList,
+)
 
 
 class HeadhunterOfflineProvider(Provider):
@@ -34,10 +39,16 @@ class HeadhunterOfflineProvider(Provider):
 
 class HeadhunterOnlineProvider(Provider):
     session_factory = provide(HeadhunterAppSessionFactory, scope=Scope.APP)
-    employee_session_factory = provide(HeadhunterUserSessionFactory, scope=Scope.APP)
+    employee_session_factory = provide(
+        HeadhunterUserSessionFactory,
+        scope=Scope.APP,
+    )
 
     @provide(scope=Scope.REQUEST)
-    async def get_app_session(self, factory: HeadhunterAppSessionFactory) -> AsyncIterator[HeadhunterAppSession]:
+    async def get_app_session(
+        self,
+        factory: HeadhunterAppSessionFactory,
+    ) -> AsyncIterator[HeadhunterAppSession]:
         async with factory() as session:
             yield session
 

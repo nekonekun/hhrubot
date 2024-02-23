@@ -1,5 +1,5 @@
+from collections.abc import AsyncIterable
 from contextlib import asynccontextmanager
-from typing import AsyncIterable
 
 import aiohttp
 from pydantic import BaseModel
@@ -26,7 +26,7 @@ class HeadhunterUserSession(aiohttp.ClientSession):
 
 
 class HeadhunterAccessToken(str):
-    pass
+    __slots__ = ()
 
 
 class HeadhunterAppSessionFactory:
@@ -39,7 +39,9 @@ class HeadhunterAppSessionFactory:
         headers = {
             'Authorization': f'Bearer {self.settings.app_token}',
             'Content-Type': 'application/json',
-            'HH-User-Agent': f'{self.settings.app_name}/{self.settings.app_version} ({self.settings.contact_email})'
+            'HH-User-Agent': f'{self.settings.app_name}'
+                             f'/{self.settings.app_version}'
+                             f' ({self.settings.contact_email})',
         }
         async with HeadhunterAppSession(base_url, headers=headers) as session:
             yield session
@@ -50,12 +52,17 @@ class HeadhunterUserSessionFactory:
         self.settings = settings
 
     @asynccontextmanager
-    async def __call__(self, access_token: HeadhunterAccessToken) -> AsyncIterable[HeadhunterUserSession]:
+    async def __call__(
+        self,
+        access_token: HeadhunterAccessToken,
+    ) -> AsyncIterable[HeadhunterUserSession]:
         base_url = self.settings.api_url
         headers = {
             'Authorization': f'Bearer {access_token}',
             'Content-Type': 'application/json',
-            'HH-User-Agent': f'{self.settings.app_name}/{self.settings.app_version} ({self.settings.contact_email})'
+            'HH-User-Agent': f'{self.settings.app_name}'
+                             f'/{self.settings.app_version}'
+                             f' ({self.settings.contact_email})',
         }
         async with HeadhunterUserSession(base_url, headers=headers) as session:
             yield session

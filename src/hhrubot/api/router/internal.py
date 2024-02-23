@@ -23,14 +23,35 @@ async def send_documents(
     payload: SendDocumentsRequest,
     bot: Annotated[Bot, Depends()],
 ):
-    await bot.send_chat_action(chat_id=payload.telegram_id, action='upload_document')
+    await bot.send_chat_action(
+        chat_id=payload.telegram_id,
+        action='upload_document',
+    )
     await asyncio.sleep(1.0)
-    tex_file = FSInputFile(path=payload.filename + '.tex', filename='resume.tex')
-    await bot.send_document(chat_id=payload.telegram_id, document=tex_file)
+    tex_file = FSInputFile(
+        path=payload.filename + '.tex',
+        filename='resume.tex',
+    )
+    await bot.send_document(
+        chat_id=payload.telegram_id,
+        document=tex_file,
+    )
     Path(payload.filename + '.tex').unlink(missing_ok=True)
-    await bot.send_chat_action(chat_id=payload.telegram_id, action='upload_document')
+    await bot.send_chat_action(
+        chat_id=payload.telegram_id,
+        action='upload_document',
+    )
     await asyncio.sleep(1.0)
-    pdf_file = FSInputFile(path=payload.filename + '.pdf', filename='resume.pdf')
-    await bot.send_document(chat_id=payload.telegram_id, document=pdf_file)
+    pdf_file = FSInputFile(
+        path=payload.filename + '.pdf',
+        filename='resume.pdf',
+    )
+    await bot.send_document(
+        chat_id=payload.telegram_id,
+        document=pdf_file,
+    )
     Path(payload.filename + '.pdf').unlink(missing_ok=True)
-    return JSONResponse(content={'ok': True}, status_code=status.HTTP_200_OK)
+    return JSONResponse(
+        content={'ok': True},
+        status_code=status.HTTP_200_OK,
+    )

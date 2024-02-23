@@ -2,14 +2,17 @@ from contextlib import asynccontextmanager
 
 from aiogram import Bot, Dispatcher
 from dishka import make_async_container
-from dishka.integrations.fastapi import setup_dishka as setup_dishka
+from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 
 from hhrubot.api.router.default import default_router
-from hhrubot.api.router.webhook import webhook_router
 from hhrubot.api.router.internal import internal_router
-
-from .providers import HeadhunterOfflineProvider, HeadhunterOnlineProvider, HeadhunterMethodsProvider
+from hhrubot.api.router.webhook import webhook_router
+from .providers import (
+    HeadhunterMethodsProvider,
+    HeadhunterOfflineProvider,
+    HeadhunterOnlineProvider,
+)
 from .tg import TelegramObjectsProvider
 
 
@@ -36,7 +39,7 @@ def create_app():
         TelegramObjectsProvider(),
         HeadhunterOfflineProvider(),
         HeadhunterOnlineProvider(),
-        HeadhunterMethodsProvider()
+        HeadhunterMethodsProvider(),
     )
     setup_dishka(container, app)
     return app

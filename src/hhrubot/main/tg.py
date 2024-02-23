@@ -9,8 +9,11 @@ from hhrubot.adapter.redisgram import RedisGram
 from hhrubot.tg.middleware.employee import EmployeeMiddleware
 from hhrubot.tg.router.echo import echo_router
 from hhrubot.tg.router.resume import resume_router
-
-from .providers import HeadhunterOfflineProvider, HeadhunterOnlineProvider, HeadhunterMethodsProvider
+from .providers import (
+    HeadhunterMethodsProvider,
+    HeadhunterOfflineProvider,
+    HeadhunterOnlineProvider,
+)
 
 
 async def create_hh_dispatcher():
@@ -32,13 +35,15 @@ async def create_hh_dispatcher():
 
 
 def get_hh_bot():
-    bot = Bot(token=os.getenv('HHRU_BOT_TOKEN'))
-    return bot
+    return Bot(token=os.getenv('HHRU_BOT_TOKEN'))
 
 
 async def init_bot(bot: Bot):
     url = os.getenv('HHRU_BOT_WEBHOOK_URL')
-    await bot.set_webhook(url=url, allowed_updates=['message', 'callback_query', 'inline_query'])
+    await bot.set_webhook(
+        url=url,
+        allowed_updates=['message', 'callback_query', 'inline_query'],
+    )
 
 
 async def dispose_bot(bot: Bot):

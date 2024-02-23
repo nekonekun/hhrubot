@@ -1,17 +1,19 @@
-import logging
 from typing import Annotated
 
 from aiogram import F, Router, flags
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, WebAppInfo, CallbackQuery
+from aiogram.types import CallbackQuery, Message, WebAppInfo
 from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardButton
 from dishka.integrations.aiogram import Depends, inject
 
-from hhrubot.application.headhunter import BuildLoginURL, GetResumeList, GetResume
-from hhrubot.tg.callback.resume import ResumeData
+from hhrubot.application.headhunter import (
+    BuildLoginURL,
+    GetResume,
+    GetResumeList,
+)
 from hhrubot.queue.tex import make_documents
-
+from hhrubot.tg.callback.resume import ResumeData
 
 resume_router = Router()
 
@@ -27,12 +29,18 @@ async def auth_user(
     context_data = await state.get_data()
     access_token = context_data.get('access_token')
     if access_token:
-        text = 'You are already authenticated.\nClick button below if you want to sign in as another user.'
+        text = 'You are already authenticated.\n'
+        text += 'Click button below if you want to sign in as another user.'
     else:
         text = 'Click button below to open hh.ru login page'
     builder = InlineKeyboardBuilder()
     login_url = build_login_url(telegram_id=message.from_user.id)
-    builder.add(InlineKeyboardButton(text='Sign in', web_app=WebAppInfo(url=login_url)))
+    builder.add(
+        InlineKeyboardButton(
+            text='Sign in',
+            web_app=WebAppInfo(url=login_url),
+        ),
+    )
     await message.answer(text, reply_markup=builder.as_markup())
 
 
@@ -52,7 +60,10 @@ async def show_resumes(
                 text=resume['title'],
                 callback_data=ResumeData(resume_id=resume['id']).pack()),
         )
-    await message.answer(f'Here are your resumes. Click one to process', reply_markup=builder.as_markup())
+    await message.answer(
+        'Here are your resumes. Click one to process',
+        reply_markup=builder.as_markup(),
+    )
 
 
 @resume_router.callback_query(ResumeData.filter())
@@ -66,8 +77,14 @@ async def process_resume(
 ):
     await callback_query.answer()
     await callback_query.message.delete_reply_markup()
-    text = 'It will take some time (around 1-2 minutes) to generate files. Please, be patient.'
+    text = 'It will take some time (around 1-2 minutes) to generate files.'
+    text += ' Please, be patient.'
     await callback_query.message.answer(text)
     resume = await get_resume(callback_data.resume_id)
-    await callback_query.message.edit_text(callback_query.message.text + '\n\n' + resume['title'])
-    make_documents.send(telegram_id=callback_query.from_user.id, filename=callback_data.resume_id, resume=resume)
+    text = callback_query.message.text + '\n\n' + resume['title']
+    await callback_query.message.edit_text(text)
+    make_documents.send(
+        telegram_id=callback_query.from_user.id,
+        filename=callback_data.resume_id,
+        resume=resume,
+    )

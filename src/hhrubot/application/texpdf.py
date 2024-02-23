@@ -1,10 +1,10 @@
-from pylatex import NoEscape, Package, Document
-from pylatex.base_classes import Options
-from datetime import date
 import re
+from datetime import date
 
+from pylatex import Document, NoEscape, Package
+from pylatex.base_classes import Options
 
-prefix = r'''%-------------------------
+prefix = r"""%-------------------------
 % Resume in Latex
 % Author : Jake Gutierrez
 % Based off of: https://github.com/sb2nov/resume
@@ -79,7 +79,7 @@ prefix = r'''%-------------------------
 
 %-------------------------------------------
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
+"""
 
 
 def generate_header(first_name, last_name, contact, site, **kwargs):
@@ -128,7 +128,7 @@ def split_experience_to_bullet_points(experience_string: str):
 def generate_experience(experience, **kwargs):
     if not experience:
         return ''
-    result = rf'\section{{Опыт работы}}' + '\n'
+    result = r'\section{Опыт работы}' + '\n'
     result += r'\resumeSubHeadingListStart'
     for work in experience:
         result += r'\resumeSubheading'
@@ -136,8 +136,8 @@ def generate_experience(experience, **kwargs):
         end = date.fromisoformat(work['end']).strftime('%m.%Y') if work['end'] else 'н.в.'
         period = start + ' — ' + end
         result += f'{{{work["position"]}}}{{{period}}}\n'
-        company = work["company"]
-        area = work["area"]
+        company = work['company']
+        area = work['area']
         if not area:
             area = ''
         else:
@@ -166,7 +166,7 @@ def render(filename, resume_data):
         lmodern=False,
         textcomp=False,
         page_numbers=False,
-        inputenc='utf8x'
+        inputenc='utf8x',
     )
 
     doc.packages.append(Package('cmap'))
@@ -181,7 +181,6 @@ def render(filename, resume_data):
     doc.packages.append(Package('fancyhdr'))
     doc.packages.append(Package('babel', options=Options('english', 'russian')))
     doc.packages.append(Package('tabularx'))
-    # doc.packages.append(Package('lmodern'))
     doc.preamble.append(NoEscape(prefix))
     doc.append(NoEscape(header.replace('&', r'\&')))
     doc.append(NoEscape(summary.replace('&', r'\&')))

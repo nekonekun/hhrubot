@@ -8,7 +8,13 @@ class RedisGram:
         self.storage = storage
         self.bot_id = bot_id
 
-    async def update_data(self, *, data: dict[str, Any], user_id: int, chat_id: int | None = None):
+    async def update_data(
+        self,
+        *,
+        data: dict[str, Any],
+        user_id: int,
+        chat_id: int | None = None,
+    ):
         if not chat_id:
             chat_id = user_id
         key = StorageKey(bot_id=self.bot_id, chat_id=chat_id, user_id=user_id)

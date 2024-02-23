@@ -1,4 +1,5 @@
-from typing import Any, Awaitable, Callable
+from collections.abc import Awaitable, Callable
+from typing import Any
 
 from aiogram import BaseMiddleware, Bot
 from aiogram.dispatcher.flags import get_flag
@@ -22,10 +23,14 @@ class EmployeeMiddleware(BaseMiddleware):
             access_token = context_data.get('access_token')
             if not access_token:
                 bot: Bot = data['bot']
+                text = 'Sorry, but you need to authenticate '
+                text += 'before using this command'
                 await bot.send_message(
                     chat_id=event.chat.id,
-                    text='Sorry, but you need to authenticate before using this command'
+                    text=text,
                 )
-                return
-            data['dishka_container'].context.update({HeadhunterAccessToken: access_token})
+                return None
+            data['dishka_container'].context.update(
+                {HeadhunterAccessToken: access_token},
+            )
         return await handler(event, data)
