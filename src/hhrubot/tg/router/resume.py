@@ -54,11 +54,11 @@ async def show_resumes(
 ):
     resumes = await get_resume_list()
     builder = InlineKeyboardBuilder()
-    for resume in resumes['items']:
+    for resume in resumes.items:
         builder.row(
             InlineKeyboardButton(
-                text=resume['title'],
-                callback_data=ResumeData(resume_id=resume['id']).pack()),
+                text=resume.title,
+                callback_data=ResumeData(resume_id=resume.id).pack()),
         )
     await message.answer(
         'Here are your resumes. Click one to process',
@@ -81,10 +81,10 @@ async def process_resume(
     text += ' Please, be patient.'
     await callback_query.message.answer(text)
     resume = await get_resume(callback_data.resume_id)
-    text = callback_query.message.text + '\n\n' + resume['title']
+    text = callback_query.message.text + '\n\n' + resume.title
     await callback_query.message.edit_text(text)
     make_documents.send(
         telegram_id=callback_query.from_user.id,
         filename=callback_data.resume_id,
-        resume=resume,
+        resume=resume.model_dump(),
     )

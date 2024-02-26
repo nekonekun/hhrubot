@@ -4,6 +4,8 @@ from hhrubot.adapter.headhunter import (
     HeadhunterUserSession,
 )
 from hhrubot.adapter.redisgram import RedisGram
+from hhrubot.application.resume_full_model import ResumeResumeFull
+from hhrubot.application.resumes_mine_model import ResumesMineResponse
 
 
 class BuildLoginURL:
@@ -60,17 +62,19 @@ class GetResumeList:
     def __init__(self, session: HeadhunterUserSession):
         self.session = session
 
-    async def __call__(self):
+    async def __call__(self) -> ResumesMineResponse:
         async with self.session.get(
             '/resumes/mine',
         ) as response:
-            return await response.json()
+            content = await response.json()
+        return ResumesMineResponse.model_validate(content)
 
 
 class GetResume:
     def __init__(self, session: HeadhunterUserSession):
         self.session = session
 
-    async def __call__(self, resume_id: str):
+    async def __call__(self, resume_id: str) -> ResumeResumeFull:
         async with self.session.get(f'/resumes/{resume_id}') as response:
-            return await response.json()
+            content = await response.json()
+        return ResumeResumeFull.model_validate(content)

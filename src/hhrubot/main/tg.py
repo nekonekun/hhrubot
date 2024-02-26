@@ -43,6 +43,7 @@ async def init_bot(bot: Bot):
     await bot.set_webhook(
         url=url,
         allowed_updates=['message', 'callback_query', 'inline_query'],
+        drop_pending_updates=True,
     )
 
 
