@@ -9,6 +9,7 @@ from hhrubot.adapter.redisgram import RedisGram
 from hhrubot.tg.middleware.employee import EmployeeMiddleware
 from hhrubot.tg.router.echo import echo_router
 from hhrubot.tg.router.resume import resume_router
+from hhrubot.tg.router.greeting import greeting_router
 from .providers import (
     HeadhunterMethodsProvider,
     HeadhunterOfflineProvider,
@@ -18,6 +19,7 @@ from .providers import (
 
 async def create_hh_dispatcher():
     dispatcher = Dispatcher(storage=RedisStorage(Redis()))
+    dispatcher.include_router(greeting_router)
     dispatcher.include_router(resume_router)
     dispatcher.include_router(echo_router)
     dispatcher.startup.register(init_bot)
